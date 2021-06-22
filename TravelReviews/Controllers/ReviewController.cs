@@ -68,18 +68,20 @@ namespace TravelReview.Controllers
 
       return NoContent();
     }
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteReview(int id)
+    [HttpDelete("{id}/{userName}")]
+    public async Task<IActionResult> DeleteReview(int id, string userName)
     {
       var review = await _db.Reviews.FindAsync(id);
       if (review == null)
       {
         return NotFound();
       }
-
-      _db.Reviews.Remove(review);
-      await _db.SaveChangesAsync();
-
+      if (userName == review.Author)
+      {
+        _db.Reviews.Remove(review);
+        await _db.SaveChangesAsync();
+      }
+      
       return NoContent();
     }
     [HttpGet]
